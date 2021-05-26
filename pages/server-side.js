@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 import { gql } from "@apollo/client";
 import client from "../apollo-client";
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const { data } = await client.query({
     query: gql`
     query Question{
@@ -18,12 +18,12 @@ export async function getStaticProps() {
   });
   return {
     props: {
-      questions: data.questions,
+      countries: data.countries.slice(0, 4),
     },
  };
 }
 
-export default function Home({ questions }) {
+export default function Home({ countries }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -43,11 +43,11 @@ export default function Home({ questions }) {
         </p>
 
         <div className={styles.grid}>
-          {questions.map((question) => (
-            <div key={question.question} className={styles.card}>
-              <h3>{question.question}</h3>
+          {countries.map((country) => (
+            <div key={country.code} className={styles.card}>
+              <h3>{country.name}</h3>
               <p>
-                {question.answer}
+                {country.code} - {country.emoji}
               </p>
             </div>
           ))}
